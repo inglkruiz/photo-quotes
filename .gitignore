@@ -1,0 +1,12 @@
+*.log
+
+#Build
+dist
+
+# Dependency directory
+node_modules
+npm-debug.log
+
+# OS metadata
+.DS_Store
+Thumbs.dbn
