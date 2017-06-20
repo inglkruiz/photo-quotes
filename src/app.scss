@@ -1,8 +1,175 @@
+@import url('https://fonts.googleapis.com/css?family=Droid+Serif:400i|Source+Sans+Pro:300');
+
+$pq-black: #000000;
+$pq-white: #ffffff;
+
+$pq-font-droidSerif: 'Droid Serif', serif;
+$pq-font-sourceSansPro: 'Source Sans Pro', sans-serif;
+
+// Fonts
+//
+// Font, line-height, and color for body text, headings, and more.
+
+$font-family-sans-serif: $pq-font-droidSerif;
+
+// Links
+//
+// Style anchor elements.
+
+// $link-color:            $brand-primary !default;
+// $link-decoration:       none !default;
+// $link-hover-color:      darken($link-color, 15%) !default;
+$link-hover-decoration: none;
+
 @import '~bootstrap/scss/bootstrap-reboot';
+@import '~bootstrap/scss/type';
+
+@mixin colored-link($font-color: #000, $hover-font-color: #000) {
+  color: $font-color;
+
+  &:hover,
+  &:focus {
+    color: $hover-font-color;
+    border-color: $hover-font-color;
+  }
+}
+
+@mixin pq-btn {
+  cursor: pointer;
+  text-transform: uppercase;
+  display: inline-flex;
+  font-weight: $btn-font-weight;
+  line-height: $btn-line-height;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+  border: 1px solid;
+
+  @include button-size($btn-padding-y, $btn-padding-x, $font-size-h5, $btn-border-radius);
+  @include transition($btn-transition);
+
+  // Share hover and focus styles
+  @include hover-focus {
+    text-decoration: none;
+  }
+
+  &:focus,
+  &.focus {
+    outline: 0;
+    box-shadow: $btn-focus-box-shadow;
+  }
+
+  // Disabled comes first so active can properly restyle
+  &.disabled,
+  &:disabled {
+    cursor: $cursor-disabled;
+    opacity: 0.65;
+
+    @include box-shadow(none);
+  }
+
+  &:active,
+  &.active {
+    background-image: none;
+
+    @include box-shadow($btn-focus-box-shadow, $btn-active-box-shadow);
+  }
+}
+
 body {
   background: {
     size: cover;
     position: center;
     repeat: no-repeat;
+  }
+  transition: background-image 0.6s ease-in-out;
+}
+
+.App {
+  &-header, &-footer {
+    color: $pq-white;
+    width: 100%;
+    background-color: rgba($pq-black, .5);
+  }
+
+  &-header {
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+  }
+
+  &-getQuote{
+    margin-left: auto;
+    margin-right: 15px;
+  }
+
+  &-footer {
+    position: fixed;
+    background-color: rgba($pq-black, .5);
+    bottom: 0;
+    right: 0;
+
+    .Quote {
+      margin: 0;
+      &-footer {
+        font: {
+          family: $pq-font-sourceSansPro;
+          weight: 300;
+        }
+        color: $pq-white;
+      }
+    }
+
+  }
+}
+
+.pq-btn {
+  @include pq-btn;
+}
+
+.pq-btn {
+  &.white-outline {
+    @include button-outline-variant($pq-white, $pq-black);
+  }
+}
+
+.pq-btn-lg {
+  // line-height: ensure even-numbered height of button next to large input
+  @include button-size($btn-padding-y-lg, $btn-padding-x-lg, $font-size-h5, $btn-border-radius-lg);
+}
+
+.pq-btn-sm {
+  // line-height: ensure proper height of button next to small input
+  @include button-size($btn-padding-y-sm, $btn-padding-x-sm, $font-size-sm, $btn-border-radius-sm);
+}
+
+.pq-link {
+  color: $link-color;
+  border-bottom: {
+    width: 1px;
+    style: solid;
+    color: transparent;
+  }
+
+  &:active,
+  &.active {
+    font-weight: $font-weight-bold;
+    border: {
+      color: $link-hover-color;
+    }
+  }
+
+  @include hover-focus {
+    color: $link-hover-color;
+    border: {
+      color: $link-hover-color;
+    }
+  }
+}
+
+.pq-link {
+  &.white {
+    @include colored-link($pq-white, $pq-white);
   }
 }

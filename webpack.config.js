@@ -1,20 +1,37 @@
 const path = require('path'),
+  webpack = require('webpack'),
+  UglifyJSPlugin = require('uglifyjs-webpack-plugin'),
   postcssFlexbugsFixes = require('postcss-flexbugs-fixes'),
   autoprefixer = require('autoprefixer')
   HtmlWebpackPlugin = require('html-webpack-plugin'),
   isProd = process.env.NODE_ENV === 'production';
 
-module.exports = {
+const plugins = isProd ? [
+  new UglifyJSPlugin({
+    test: /\.js$/,
+    minimize: isProd,
+    sourceMap: isProd, // map error message locations to modules
+    // https://github.com/mishoo/UglifyJS2#compressor-options
+    compress: {
+      warnings: !isProd,
+      dead_code: true,
+      drop_debugger: true,
+      drop_console: false,
+    },
+  })] :
+  [];
+
+const config = {
   target: 'web',
   //input
   entry: './src',
   //output
   output: {
-      path: path.join(__dirname, 'dist'),
+      path: path.join(__dirname, isProd ? 'docs' : 'dist'),
       filename: 'bundle.js'
   },
   //sourcemaps
-  devtool: 'source-map',
+  devtool: isProd ? 'source-map' : 'eval',
   //loader rules
   module: {
     rules: [
@@ -28,7 +45,10 @@ module.exports = {
           'style-loader',
           {
             loader: 'css-loader', // translates CSS into CommonJS
-            options: { minimize: isProd, sourceMap: isProd },
+            options: { 
+              minimize: isProd,
+              sourceMap: isProd
+            },
           },
           {
             loader: 'postcss-loader',
@@ -69,11 +89,16 @@ module.exports = {
       filename: 'index.html',
       template: 'src/index.html',
     }),
-  ],
-  //server
-  devServer: {
+  ].concat(plugins),
+};
+
+if(!isProd) {
+  //devServer
+  config.devServer = {
     contentBase: path.join(__dirname, 'dist'),
     watchContentBase: true,
     compress: true,
-  },
-};
+  };
+}
+
+module.exports = config;
