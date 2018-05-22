@@ -26,7 +26,7 @@ function getPhotoQuote() {
     .then(res => res.json()),
   ]).then((responses) => {
     const image  = responses[0];
-    const  text = responses[1];
+    const  text = responses[1][0];
     const authorEl = document.getElementsByClassName('Quote-author')[0]
     const photographerEl = document.getElementsByClassName('App-photographer')[0];
     const { user: {name: photographerName, links: { html: photographerLink } } } = image;
